@@ -3,14 +3,16 @@ package com.example.blockchainservice.services;
 import com.example.blockchainservice.entities.Block;
 import com.example.blockchainservice.entities.Transaction;
 import com.example.blockchainservice.repositories.BlockRepository;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.Collection;
+
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -24,9 +26,7 @@ public class BlockServiceImp implements BlockService{
 
     @Override
     public Block saveBlock(Block block) {
-//        Collection<Transaction> transactions = block.getListeTransactions();
         String hash = calculHashBloc(block);
-
         block.setHashBlock(hash);
         block.setDateCreation(new Date());
         System.out.println("in service imp ============");
@@ -37,14 +37,19 @@ public class BlockServiceImp implements BlockService{
 
     @Override
     public String calculHashBloc(Block block) {
-        Collection<Transaction> transactions = block.getListeTransactions();
-        String str = ""+block.getHashBlocPrec()+ block.getNonce()+ transactions.hashCode();
+        int hashCodeTransactions = block.getListeTransactions() != null ? block.getListeTransactions().hashCode() : 0;
+        System.out.println(hashCodeTransactions+"========");
+        String str = String.valueOf(block.getHashBlocPrec()+ block.getNonce()+ hashCodeTransactions);
+        System.out.println(hashCodeTransactions);
+        String hashStr = DigestUtils.sha256Hex(str);
+        System.out.println(hashStr+"--------");
         String hash="";
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] encodedhash = digest.digest(
-                    str.getBytes(StandardCharsets.UTF_8));
+                    hashStr.getBytes(StandardCharsets.UTF_8));
             hash =  DatatypeConverter.printHexBinary(encodedhash);
+            System.out.println(hash);
         }catch(Exception ex) {
             ex.printStackTrace();
         }
@@ -57,3 +62,4 @@ public class BlockServiceImp implements BlockService{
 
     }
 }
+

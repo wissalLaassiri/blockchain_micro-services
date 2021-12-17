@@ -6,5 +6,4 @@ public interface BlockService {
     Block saveBlock(Block block);
     String calculHashBloc(Block block);
     void minerBlock(int diff);
-
 }

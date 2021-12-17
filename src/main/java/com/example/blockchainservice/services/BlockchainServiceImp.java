@@ -2,6 +2,7 @@ package com.example.blockchainservice.services;
 
 import com.example.blockchainservice.entities.Block;
 import com.example.blockchainservice.entities.Blockchain;
+import com.example.blockchainservice.repositories.BlockchainRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,10 +11,16 @@ import java.util.List;
 @Service
 @Transactional
 public class BlockchainServiceImp implements BlockchainService{
-    @Override
-    public Blockchain addNewBlockToBlockchain(Block block) {
+    BlockchainRepository blockchainRepository;
 
-        return null;
+    public BlockchainServiceImp(BlockchainRepository blockchainRepository) {
+        this.blockchainRepository = blockchainRepository;
+    }
+
+    @Override
+    public Blockchain addNewBlockToBlockchain(Blockchain blockchain,Block block) {
+        blockchain.getListBlocks().add(block);
+        return blockchain;
     }
 
     @Override
@@ -22,8 +29,8 @@ public class BlockchainServiceImp implements BlockchainService{
     }
 
     @Override
-    public Block getLastBlock(Blockchain blockchain) {
-
+    public Block getLastBlock(String idBlockchain) {
+        Blockchain blockchain = blockchainRepository.getById(idBlockchain);
         List<Block> list_Blocks = blockchain.getListBlocks();
         return  list_Blocks.get(list_Blocks.size()-1);
     }

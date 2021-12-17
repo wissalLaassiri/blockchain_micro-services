@@ -21,7 +21,7 @@ public class Transaction {
     private String adress_dest;
     private Date date ;
     private double montant;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Block block;
 
     public Transaction(String adress_source, String adress_dest, double montant) {

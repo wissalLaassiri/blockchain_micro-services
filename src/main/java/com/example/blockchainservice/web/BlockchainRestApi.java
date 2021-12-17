@@ -6,6 +6,7 @@ import com.example.blockchainservice.services.BlockchainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +20,8 @@ public class BlockchainRestApi {
     }
 
     @GetMapping(path = "/lastblockchain")
-    public Block getLastBlock(Blockchain blockchain){
-        return blockchainService.getLastBlock(blockchain);
+    public Block getLastBlock(@RequestBody String idBlockchain){
+        return blockchainService.getLastBlock(idBlockchain);
     }
 
 }
